@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import deployURL from "../../../constants/constants";
+var forDeleteState = "";
 //make create income action
 export const createInc = createAsyncThunk(
   "income/create",
@@ -66,8 +67,8 @@ export const updateInc = createAsyncThunk(
 );
 
 // fetch single income action
-export const fetchSingleInc = createAsyncThunk(
-  "income/fetchSingle",
+export const fetchIncomePerPage = createAsyncThunk(
+  "income/fetchIncomePerPage",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     // GET TOKEN FROM STATE
     const state = getState();
@@ -98,9 +99,9 @@ export const fetchSingleInc = createAsyncThunk(
   }
 );
 
-// fetch single income action
-export const fetchSingleIncwop = createAsyncThunk(
-  "income/fetchSinglewop",
+// fetch single income action WOP (WithOut Pagination)
+export const fetchAllIncomes = createAsyncThunk(
+  "income/fetchAllIncomes",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     // GET TOKEN FROM STATE
     const state = getState();
@@ -135,8 +136,8 @@ export const deleteInc = createAsyncThunk(
   async (payload, { rejectWithValue, getState, dispatch }) => {
     // GET TOKEN FROM STATE
     const state = getState();
+    forDeleteState = state;
     const token = state?.users?.userAuth?.token;
-    // console.log("Bearer: " + token);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -145,9 +146,8 @@ export const deleteInc = createAsyncThunk(
     };
     try {
       //make http call here
-      const { data } = await axios.post(
+      const { data } = await axios.delete(
         `${deployURL}/api/income/` + payload?.id + "/delete",
-        payload,
         config
       );
       return data;
@@ -196,14 +196,14 @@ const incomeSlices = createSlice({
     //for Fetch single action
 
     // handle pending state
-    builder.addCase(fetchSingleInc.pending, (state, action) => {
+    builder.addCase(fetchIncomePerPage.pending, (state, action) => {
       state.loading = true;
       state.appErr = undefined;
       state.serverErr = undefined;
     });
 
     //handle success state
-    builder.addCase(fetchSingleInc.fulfilled, (state, action) => {
+    builder.addCase(fetchIncomePerPage.fulfilled, (state, action) => {
       state.incomeList = action?.payload;
       state.loading = false;
       state.appErr = undefined;
@@ -211,7 +211,7 @@ const incomeSlices = createSlice({
     });
 
     //handle rejected state
-    builder.addCase(fetchSingleInc.rejected, (state, action) => {
+    builder.addCase(fetchIncomePerPage.rejected, (state, action) => {
       // console.log(action);
       state.loading = false;
       state.appErr = action?.payload?.msg;
@@ -221,14 +221,14 @@ const incomeSlices = createSlice({
     //for Fetch single action WOP
 
     // handle pending state
-    builder.addCase(fetchSingleIncwop.pending, (state, action) => {
+    builder.addCase(fetchAllIncomes.pending, (state, action) => {
       state.loading = true;
       state.appErr = undefined;
       state.serverErr = undefined;
     });
 
     //handle success state
-    builder.addCase(fetchSingleIncwop.fulfilled, (state, action) => {
+    builder.addCase(fetchAllIncomes.fulfilled, (state, action) => {
       state.incomeListwop = action?.payload;
       state.loading = false;
       state.appErr = undefined;
@@ -236,7 +236,7 @@ const incomeSlices = createSlice({
     });
 
     //handle rejected state
-    builder.addCase(fetchSingleIncwop.rejected, (state, action) => {
+    builder.addCase(fetchAllIncomes.rejected, (state, action) => {
       // console.log(action);
       state.loading = false;
       state.appErr = action?.payload?.msg;
@@ -267,7 +267,7 @@ const incomeSlices = createSlice({
       state.serverErr = action?.error?.msg;
     });
 
-    //for delete expenses
+    //for delete incomes
     // handle pending state
     builder.addCase(deleteInc.pending, (state, action) => {
       state.loading = true;
@@ -277,7 +277,8 @@ const incomeSlices = createSlice({
 
     //handle success state
     builder.addCase(deleteInc.fulfilled, (state, action) => {
-      state.expenseDeleted = action?.payload;
+      const incomeList = forDeleteState?.income?.incomeList?.inc.filter(incList => incList._id !== action?.payload?._id);
+      state.incomeList = {inc : incomeList, totalPages: forDeleteState?.income?.incomeList?.totalPages};
       state.loading = false;
       state.appErr = undefined;
       state.serverErr = undefined;

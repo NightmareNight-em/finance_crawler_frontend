@@ -32,22 +32,6 @@ export const loginuserAction = createAsyncThunk(
   }
 );
 
-//Logout action
-// export const logout = createAsyncThunk(
-//   "user/logout",
-//   async (payload, { rejectWithValue, getState, dispatch }) => {
-//     try {
-//       //Save user into localstorage
-//       localStorage.removeItem("userInfo");
-//     } catch (error) {
-//       if (!error?.response) {
-//         throw error;
-//       }
-//       return rejectWithValue(error?.response?.data);
-//     }
-//   }
-// );
-
 //register action
 export const registerUserAction = createAsyncThunk(
   "user/register",

@@ -16,15 +16,15 @@ import Title from "./Title";
 import { useDispatch, useSelector } from "react-redux";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { fetchSingleIncwop } from "../redux/slices/income/incomeSlices";
-import { fetchSingleExpwop } from "../redux/slices/expense/expenseSlices";
+import { fetchAllIncomes } from "../redux/slices/income/incomeSlices";
+import { fetchAllExpenses } from "../redux/slices/expense/expenseSlices";
 
 export default function Chart() {
   //getting expense
   const state = useSelector((state) => state?.users);
   const dispatch = useDispatch();
   React.useEffect(() => {
-    dispatch(fetchSingleExpwop({ id: state?.userAuth?.id }));
+    dispatch(fetchAllExpenses({ id: state?.userAuth?.id }));
   }, [dispatch]);
 
   const {
@@ -35,7 +35,7 @@ export default function Chart() {
   } = useSelector((state) => state?.expense);
 
   React.useEffect(() => {
-    dispatch(fetchSingleIncwop({ id: state?.userAuth?.id }));
+    dispatch(fetchAllIncomes({ id: state?.userAuth?.id }));
   }, [dispatch]);
 
   const { loading, appErr, serverErr, incomeListwop } = useSelector(

@@ -7,7 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../components/Title";
-import { fetchSingleInc } from "../../redux/slices/income/incomeSlices";
+import { fetchIncomePerPage } from "../../redux/slices/income/incomeSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
@@ -17,8 +17,9 @@ import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AppPagination from "../../components/appPagination";
-import DeleteInc from "./deleteIncome";
+import { deleteInc } from "../../redux/slices/income/incomeSlices";
 import dateFormatter from "../../utils/dateFormatter";
+import {fetchExpensePerPage} from "../../redux/slices/expense/expenseSlices";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,7 +52,7 @@ export default function IncomeTable() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state?.users);
   React.useEffect(() => {
-    dispatch(fetchSingleInc({ page: page, id: state?.userAuth?.id }));
+    dispatch(fetchIncomePerPage({ page: page, id: state?.userAuth?.id }));
   }, [dispatch, page, setPage]);
 
   const { loading, appErr, serverErr, incomeList } = useSelector(
@@ -122,7 +123,7 @@ export default function IncomeTable() {
 
                     <button
                       onClick={() => {
-                        DeleteInc({ row: row, token: state?.userAuth?.token });
+                        dispatch(deleteInc({ id: row?._id}));
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}

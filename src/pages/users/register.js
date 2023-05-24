@@ -59,29 +59,6 @@ export default function Register() {
 
   const getState = useSelector((state) => state?.users);
   const { userLoading, userServerErr, userAppErr, isRegistered } = getState;
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-
-  //   axios
-  //     .post("http://localhost:8080/api/users/register", {
-  //       email: data.get("email"),
-  //       password: data.get("password"),
-  //       firstname: data.get("firstName"),
-  //       lastname: data.get("lastName"),
-  //     })
-  //     .then(function (response) {
-  //       console.log(response.data);
-  //       let res = response.data;
-  //       window.location.href = "/login";
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // console.log({
-  //   email: data.get("email"),
-  //   password: data.get("password"),
-  // });
   const formik = useFormik({
     initialValues: {
       firstname: "",

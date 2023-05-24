@@ -68,30 +68,6 @@ export default function AddIncome() {
   // console.log(getState);
   const { appErr, serverErr, loading, income } = getState;
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-
-  //   axios
-  //     .post("http://localhost:8080/api/users/login", {
-  //       amount: data.get("amount"),
-  //       description: data.get("description"),
-  //     })
-  //     .then(function (response) {
-  //       console.log(response.data);
-  //       let res = response.data;
-  //       window.location.href = "/dashboard";
-  //     })
-  //     .catch(function (error) {
-  //       // console.log(error);
-  //       window.location.href = "/register";
-  //     });
-
-  //   console.log({
-  //     amount: data.get("amount"),
-  //     description: data.get("description"),
-  //   });
-  // };
   const formik = useFormik({
     initialValues: {
       title: "",

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import deployURL from "../../../constants/constants";
 
+var forDeleteState = "";
 //make create expense action
 export const createExp = createAsyncThunk(
   "expense/create",
@@ -98,7 +99,7 @@ export const fetchAllExp = createAsyncThunk(
 );
 
 // fetch single expenses action
-export const fetchSingleExp = createAsyncThunk(
+export const fetchExpensePerPage = createAsyncThunk(
   "expense/fetchSingle",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     // GET TOKEN FROM STATE
@@ -130,9 +131,9 @@ export const fetchSingleExp = createAsyncThunk(
   }
 );
 
-// fetch single expenses action WOP
-export const fetchSingleExpwop = createAsyncThunk(
-  "expense/fetchSinglewop",
+// fetch single expenses action WOP (WithOut Pagination)
+export const fetchAllExpenses = createAsyncThunk(
+  "expense/fetchAllExpenses",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     // GET TOKEN FROM STATE
     const state = getState();
@@ -167,8 +168,8 @@ export const deleteExp = createAsyncThunk(
   async (payload, { rejectWithValue, getState, dispatch }) => {
     // GET TOKEN FROM STATE
     const state = getState();
+    forDeleteState = state;
     const token = state?.users?.userAuth?.token;
-
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -177,13 +178,13 @@ export const deleteExp = createAsyncThunk(
     };
     try {
       //make http call here
-      const { data } = await axios.post(
+      const { data } = await axios.delete(
         `${deployURL}/api/expense/` +
           payload?.id +
           "/delete",
-        payload,
         config
       );
+
       return data;
     } catch (error) {
       if (!error?.response) {
@@ -229,14 +230,14 @@ const expenseSlices = createSlice({
     //for Fetch all action
 
     // handle pending state
-    builder.addCase(fetchSingleExp.pending, (state, action) => {
+    builder.addCase(fetchExpensePerPage.pending, (state, action) => {
       state.loading = true;
       state.appErr = undefined;
       state.serverErr = undefined;
     });
 
     //handle success state
-    builder.addCase(fetchSingleExp.fulfilled, (state, action) => {
+    builder.addCase(fetchExpensePerPage.fulfilled, (state, action) => {
       state.expenseList = action?.payload;
       state.loading = false;
       state.appErr = undefined;
@@ -244,7 +245,7 @@ const expenseSlices = createSlice({
     });
 
     //handle rejected state
-    builder.addCase(fetchSingleExp.rejected, (state, action) => {
+    builder.addCase(fetchExpensePerPage.rejected, (state, action) => {
       // console.log(action);
       state.loading = false;
       state.appErr = action?.payload?.msg;
@@ -254,14 +255,14 @@ const expenseSlices = createSlice({
     //for Fetch single action wop
 
     // handle pending state
-    builder.addCase(fetchSingleExpwop.pending, (state, action) => {
+    builder.addCase(fetchAllExpenses.pending, (state, action) => {
       state.loading = true;
       state.appErr = undefined;
       state.serverErr = undefined;
     });
 
     //handle success state
-    builder.addCase(fetchSingleExpwop.fulfilled, (state, action) => {
+    builder.addCase(fetchAllExpenses.fulfilled, (state, action) => {
       state.expenseListwop = action?.payload;
       state.loading = false;
       state.appErr = undefined;
@@ -269,7 +270,7 @@ const expenseSlices = createSlice({
     });
 
     //handle rejected state
-    builder.addCase(fetchSingleExpwop.rejected, (state, action) => {
+    builder.addCase(fetchAllExpenses.rejected, (state, action) => {
       // console.log(action);
       state.loading = false;
       state.appErr = action?.payload?.msg;
@@ -310,10 +311,11 @@ const expenseSlices = createSlice({
 
     //handle success state
     builder.addCase(deleteExp.fulfilled, (state, action) => {
-      state.expenseDeleted = action?.payload;
-      state.loading = false;
-      state.appErr = undefined;
-      state.serverErr = undefined;
+        const expenseList = forDeleteState?.expense?.expenseList?.exp.filter(expList => expList._id !== action?.payload?._id);
+        state.expenseList = {exp : expenseList, totalPages: forDeleteState?.expense?.expenseList?.totalPages};
+        state.loading = false;
+        state.appErr = undefined;
+        state.serverErr = undefined;
     });
 
     //handle rejected state

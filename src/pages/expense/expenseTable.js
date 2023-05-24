@@ -7,7 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../components/Title";
-import { fetchSingleExp } from "../../redux/slices/expense/expenseSlices";
+import {deleteExp, fetchExpensePerPage} from "../../redux/slices/expense/expenseSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
@@ -18,8 +18,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AppPagination from "../../components/appPagination";
 import dateFormatter from "../../utils/dateFormatter";
-// import { deleteExp } from "../../redux/slices/expense/expenseSlices";
-import DeleteExp from "./deleteExpense";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -47,13 +45,11 @@ function preventDefault(event) {
 
 export default function ExpenseTable() {
   const [page, setPage] = React.useState(1);
-  // console.log(page);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state?.users);
-  // const effect = React.useEffect();
   React.useEffect(() => {
-    dispatch(fetchSingleExp({ page: page, id: state?.userAuth?.id }));
+    dispatch(fetchExpensePerPage({ page: page, id: state?.userAuth?.id }));
   }, [dispatch, page, setPage]);
 
   const { loading, appErr, serverErr, expenseList } = useSelector(
@@ -128,8 +124,8 @@ export default function ExpenseTable() {
 
                     <button
                       onClick={() => {
-                        // console.log("here");
-                        DeleteExp({ row: row, token: state?.userAuth?.token });
+                        dispatch(deleteExp({ id: row?._id}));
+                        // window.location.reload();
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}

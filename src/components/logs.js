@@ -2,8 +2,8 @@ import * as React from "react";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Title from "./Title";
-import { fetchSingleIncwop } from "../redux/slices/income/incomeSlices";
-import { fetchSingleExpwop } from "../redux/slices/expense/expenseSlices";
+import { fetchAllIncomes } from "../redux/slices/income/incomeSlices";
+import { fetchAllExpenses } from "../redux/slices/expense/expenseSlices";
 import { useDispatch, useSelector } from "react-redux";
 
 function preventDefault(event) {
@@ -14,7 +14,7 @@ export default function Deposits() {
   const state = useSelector((state) => state?.users);
   const dispatch = useDispatch();
   React.useEffect(() => {
-    dispatch(fetchSingleExpwop({ id: state?.userAuth?.id }));
+    dispatch(fetchAllExpenses({ id: state?.userAuth?.id }));
   }, [dispatch]);
 
   const {
@@ -25,7 +25,7 @@ export default function Deposits() {
   } = useSelector((state) => state?.expense);
 
   React.useEffect(() => {
-    dispatch(fetchSingleIncwop({ id: state?.userAuth?.id }));
+    dispatch(fetchAllIncomes({ id: state?.userAuth?.id }));
   }, [dispatch]);
 
   const { loading, appErr, serverErr, incomeListwop } = useSelector(
@@ -73,9 +73,10 @@ export default function Deposits() {
     mapI.set(d.month, (mapI.get(d.month) || 0) + d.income);
   });
 
-  const savings =
+  var savings =
     mapI.get("0" + String(new Date().getMonth() + 1)) -
     mapE.get("0" + String(new Date().getMonth() + 1));
+  if(savings<0) savings = 0;
   const currMonth = mapMonths.get("0" + String(new Date().getMonth() + 1));
 
   return (
