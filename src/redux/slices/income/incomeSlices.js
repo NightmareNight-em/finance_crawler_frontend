@@ -145,7 +145,7 @@ export const deleteInc = createAsyncThunk(
     };
     try {
       //make http call here
-      const { data } = await axios.delete(
+      const { data } = await axios.post(
         `${deployURL}/api/income/` + payload?.id + "/delete",
         payload,
         config
