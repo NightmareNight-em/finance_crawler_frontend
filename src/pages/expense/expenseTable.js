@@ -129,7 +129,7 @@ export default function ExpenseTable() {
                     <button
                       onClick={() => {
                         dispatch(deleteExp({ id: row?._id}));
-                        // window.location.reload();
+                        window.location.reload();
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}

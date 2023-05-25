@@ -128,6 +128,7 @@ export default function IncomeTable() {
                     <button
                       onClick={() => {
                         dispatch(deleteInc({ id: row?._id}));
+                        window.location.reload();
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}
