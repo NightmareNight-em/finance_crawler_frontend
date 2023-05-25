@@ -281,6 +281,7 @@ const incomeSlices = createSlice({
       state.loading = false;
       state.appErr = undefined;
       state.serverErr = undefined;
+      window.location.reload();
     });
 
     //handle rejected state

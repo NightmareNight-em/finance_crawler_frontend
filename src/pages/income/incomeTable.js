@@ -55,13 +55,9 @@ export default function IncomeTable() {
     dispatch(fetchIncomePerPage({ page: page, id: state?.userAuth?.id }));
   }, [dispatch, page, setPage]);
 
-  const { loading, appErr, serverErr, incomeList, deleted } = useSelector(
+  const { loading, appErr, serverErr, incomeList } = useSelector(
     (state) => state?.income
   );
-
-  if(deleted){
-    window.location.reload(1);
-  }
 
   return (
     <>
@@ -128,7 +124,6 @@ export default function IncomeTable() {
                     <button
                       onClick={() => {
                         dispatch(deleteInc({ id: row?._id}));
-                        window.location.reload();
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}

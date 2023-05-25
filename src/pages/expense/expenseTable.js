@@ -52,13 +52,9 @@ export default function ExpenseTable() {
     dispatch(fetchExpensePerPage({ page: page, id: state?.userAuth?.id }));
   }, [dispatch, page, setPage]);
 
-  const { loading, appErr, serverErr, expenseList, deleted } = useSelector(
+  const { loading, appErr, serverErr, expenseList } = useSelector(
     (state) => state?.expense
   );
-
-  if(deleted){
-    window.location.reload(1);
-  }
 
   return (
     <>
@@ -129,7 +125,6 @@ export default function ExpenseTable() {
                     <button
                       onClick={() => {
                         dispatch(deleteExp({ id: row?._id}));
-                        window.location.reload();
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}
