@@ -183,8 +183,9 @@ export const deleteExp = createAsyncThunk(
           payload?.id +
           "/delete",
         config
-      );
-      return data;
+      ).then((data)=>{
+          return data;
+      });
     } catch (error) {
       if (!error?.response) {
         throw error;
@@ -316,7 +317,7 @@ const expenseSlices = createSlice({
         state.loading = false;
         state.appErr = undefined;
         state.serverErr = undefined;
-        window.location.reload();
+
     });
 
     //handle rejected state

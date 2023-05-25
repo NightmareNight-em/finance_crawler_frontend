@@ -13,6 +13,7 @@ function preventDefault(event) {
 export default function Deposits() {
   const state = useSelector((state) => state?.users);
   const dispatch = useDispatch();
+
   React.useEffect(() => {
     dispatch(fetchAllExpenses({ id: state?.userAuth?.id }));
   }, [dispatch]);
@@ -74,9 +75,9 @@ export default function Deposits() {
   });
 
   var savings =
-    mapI.get("0" + String(new Date().getMonth() + 1)) -
-    mapE.get("0" + String(new Date().getMonth() + 1));
-  if(savings<0) savings = 0;
+      (mapI.get("0" + String(new Date().getMonth() + 1)) || 0) -
+      (mapE.get("0" + String(new Date().getMonth() + 1)) || 0);
+
   const currMonth = mapMonths.get("0" + String(new Date().getMonth() + 1));
 
   return (

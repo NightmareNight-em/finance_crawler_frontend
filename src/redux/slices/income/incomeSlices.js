@@ -149,8 +149,10 @@ export const deleteInc = createAsyncThunk(
       const { data } = await axios.delete(
         `${deployURL}/api/income/` + payload?.id + "/delete",
         config
-      );
-      return data;
+      ).then((data)=>{
+        return data;
+      });
+
     } catch (error) {
       if (!error?.response) {
         throw error;
@@ -281,7 +283,6 @@ const incomeSlices = createSlice({
       state.loading = false;
       state.appErr = undefined;
       state.serverErr = undefined;
-      window.location.reload();
     });
 
     //handle rejected state

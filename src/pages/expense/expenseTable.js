@@ -7,7 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../components/Title";
-import {deleteExp, fetchExpensePerPage} from "../../redux/slices/expense/expenseSlices";
+import {fetchExpensePerPage} from "../../redux/slices/expense/expenseSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
@@ -18,6 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AppPagination from "../../components/appPagination";
 import dateFormatter from "../../utils/dateFormatter";
+import deleteExp from "../expense/deleteExpense";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -124,7 +125,8 @@ export default function ExpenseTable() {
 
                     <button
                       onClick={() => {
-                        dispatch(deleteExp({ id: row?._id}));
+                        // dispatch(deleteExp({ id: row?._id}));
+                        deleteExp({ row: row, token: state?.userAuth?.token });
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}

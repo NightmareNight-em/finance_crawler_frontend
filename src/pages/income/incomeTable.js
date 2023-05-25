@@ -17,9 +17,9 @@ import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AppPagination from "../../components/appPagination";
-import { deleteInc } from "../../redux/slices/income/incomeSlices";
 import dateFormatter from "../../utils/dateFormatter";
-import {fetchExpensePerPage} from "../../redux/slices/expense/expenseSlices";
+import deleteInc from "./deleteIncome";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -123,7 +123,7 @@ export default function IncomeTable() {
 
                     <button
                       onClick={() => {
-                        dispatch(deleteInc({ id: row?._id}));
+                        deleteInc({ row: row, token: state?.userAuth?.token });
                       }}
                       className="badge bg-success-light text-success"
                       style={{ border: "none", background: "none" }}
