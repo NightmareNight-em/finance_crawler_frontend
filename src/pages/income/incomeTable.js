@@ -55,9 +55,13 @@ export default function IncomeTable() {
     dispatch(fetchIncomePerPage({ page: page, id: state?.userAuth?.id }));
   }, [dispatch, page, setPage]);
 
-  const { loading, appErr, serverErr, incomeList } = useSelector(
+  const { loading, appErr, serverErr, incomeList, deleted } = useSelector(
     (state) => state?.income
   );
+
+  if(deleted){
+    window.location.reload(1);
+  }
 
   return (
     <>

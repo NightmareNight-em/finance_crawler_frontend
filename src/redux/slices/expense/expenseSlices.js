@@ -311,8 +311,9 @@ const expenseSlices = createSlice({
 
     //handle success state
     builder.addCase(deleteExp.fulfilled, (state, action) => {
-        const expenseList = forDeleteState?.expense?.expenseList?.exp.filter(expList => expList._id !== action?.payload?._id);
-        state.expenseList = {exp : expenseList, totalPages: forDeleteState?.expense?.expenseList?.totalPages};
+        // const expenseList = forDeleteState?.expense?.expenseList?.exp.filter(expList => expList._id !== action?.payload?._id);
+        // state.expenseList = {exp : expenseList, totalPages: forDeleteState?.expense?.expenseList?.totalPages};
+        state.deleted = true;
         state.loading = false;
         state.appErr = undefined;
         state.serverErr = undefined;

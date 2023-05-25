@@ -277,8 +277,7 @@ const incomeSlices = createSlice({
 
     //handle success state
     builder.addCase(deleteInc.fulfilled, (state, action) => {
-      const incomeList = forDeleteState?.income?.incomeList?.inc.filter(incList => incList._id !== action?.payload?._id);
-      state.incomeList = {inc : incomeList, totalPages: forDeleteState?.income?.incomeList?.totalPages};
+      state.deleted = true;
       state.loading = false;
       state.appErr = undefined;
       state.serverErr = undefined;

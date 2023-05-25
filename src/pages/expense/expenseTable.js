@@ -52,9 +52,13 @@ export default function ExpenseTable() {
     dispatch(fetchExpensePerPage({ page: page, id: state?.userAuth?.id }));
   }, [dispatch, page, setPage]);
 
-  const { loading, appErr, serverErr, expenseList } = useSelector(
+  const { loading, appErr, serverErr, expenseList, deleted } = useSelector(
     (state) => state?.expense
   );
+
+  if(deleted){
+    window.location.reload(1);
+  }
 
   return (
     <>
